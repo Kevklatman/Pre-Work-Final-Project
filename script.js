@@ -138,19 +138,19 @@ function calculatePercentages() {
         if (fairwayCells[j].textContent.toUpperCase() === 'Y') outFairway++;
         if (greenCells[j].textContent.toUpperCase() === 'Y') outGreen++;
     }
-    fairwayCells[10].textContent = `${outFairway}/9 (${Math.round((outFairway / 9) * 100)}%)`;
-    greenCells[10].textContent = `${outGreen}/9 (${Math.round((outGreen / 9) * 100)}%)`;
+    fairwayCells[10].textContent = `${outFairway} (${Math.round((outFairway / 9) * 100)}%)`;
+    greenCells[10].textContent = `${outGreen} (${Math.round((outGreen / 9) * 100)}%)`;
 
     for (let j = 11; j <= 19; j++) {
         if (fairwayCells[j].textContent.toUpperCase() === 'Y') inFairway++;
         if (greenCells[j].textContent.toUpperCase() === 'Y') inGreen++;
     }
-    fairwayCells[20].textContent = `${inFairway}/9 (${Math.round((inFairway / 9) * 100)}%)`;
-    greenCells[20].textContent = `${inGreen}/9 (${Math.round((inGreen / 9) * 100)}%)`;
+    fairwayCells[20].textContent = `${inFairway} (${Math.round((inFairway / 9) * 100)}%)`;
+    greenCells[20].textContent = `${inGreen} (${Math.round((inGreen / 9) * 100)}%)`;
     
     let totalFairway = outFairway + inFairway;
     let totalGreen = outGreen + inGreen;
-    fairwayCells[21].textContent = `${totalFairway}/18 (${Math.round((totalFairway / 18) * 100)}%)`;
+    fairwayCells[21].textContent = `${totalFairway} (${Math.round((totalFairway / 18) * 100)}%)`;
     greenCells[21].textContent = `${totalGreen}/18 (${Math.round((totalGreen / 18) * 100)}%)`;
 }
 
