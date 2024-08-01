@@ -105,3 +105,102 @@ table.addEventListener('input', function(e) {
         e.target.textContent = e.target.textContent.replace(/[^0-9]/g, '').slice(0, 2);
     }
 });
+
+// ... (previous code remains the same until the event listeners)
+
+// Function to calculate totals
+function calculateTotals() {
+    // ... (calculation logic remains the same)
+}
+
+// Add event listener to recalculate totals when scores change
+table.addEventListener('input', calculateTotals);
+
+// Function to get the next editable cell
+function getNextEditableCell(currentCell, direction) {
+    let row = currentCell.parentElement;
+    let cellIndex = currentCell.cellIndex;
+    let rowIndex = row.rowIndex;
+
+    switch (direction) {
+        case 'ArrowRight':
+            while (row) {
+                while (cellIndex < row.cells.length - 1) {
+                    cellIndex++;
+                    if (row.cells[cellIndex].classList.contains('score')) {
+                        return row.cells[cellIndex];
+                    }
+                }
+                row = row.nextElementSibling;
+                cellIndex = 0;
+            }
+            break;
+        case 'ArrowLeft':
+            while (row) {
+                while (cellIndex > 0) {
+                    cellIndex--;
+                    if (row.cells[cellIndex].classList.contains('score')) {
+                        return row.cells[cellIndex];
+                    }
+                }
+                row = row.previousElementSibling;
+                cellIndex = row ? row.cells.length - 1 : 0;
+            }
+            break;
+        case 'ArrowDown':
+            while (rowIndex < table.rows.length - 1) {
+                rowIndex++;
+                let cell = table.rows[rowIndex].cells[cellIndex];
+                if (cell.classList.contains('score')) {
+                    return cell;
+                }
+            }
+            break;
+        case 'ArrowUp':
+            while (rowIndex > 1) {
+                rowIndex--;
+                let cell = table.rows[rowIndex].cells[cellIndex];
+                if (cell.classList.contains('score')) {
+                    return cell;
+                }
+            }
+            break;
+    }
+    return null;
+}
+
+// Handle keydown events for navigation and data entry
+table.addEventListener('keydown', function(e) {
+    if (e.target.classList.contains('score')) {
+        if (['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            e.preventDefault();
+            let nextCell = getNextEditableCell(e.target, e.key);
+            if (nextCell) {
+                nextCell.focus();
+                // Place the cursor at the end of the content
+                let range = document.createRange();
+                let sel = window.getSelection();
+                range.selectNodeContents(nextCell);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            let nextCell = getNextEditableCell(e.target, 'ArrowRight');
+            if (nextCell) {
+                nextCell.focus();
+            }
+        }
+    }
+});
+
+// Limit input to 1 or 2 digits
+table.addEventListener('input', function(e) {
+    if (e.target.classList.contains('score')) {
+        e.target.textContent = e.target.textContent.replace(/[^0-9]/g, '').slice(0, 2);
+    }
+});
+
+// Initial calculation
+calculateTotals();
