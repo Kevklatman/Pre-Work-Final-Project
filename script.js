@@ -4,12 +4,14 @@ let table = document.createElement('table');
 // Create table header (Hole numbers)
 let headerRow = document.createElement('tr');
 headerRow.innerHTML = '<th>Hole</th>';
-for (let i = 1; i <= 18; i++) {
-    let th = document.createElement('th');
-    th.textContent = i;
-    headerRow.appendChild(th);
+for (let i = 1; i <= 9; i++) {
+    headerRow.innerHTML += `<th>${i}</th>`;
 }
-headerRow.innerHTML += '<th>Out</th><th>In</th><th>Total</th>';
+headerRow.innerHTML += '<th>Out</th>';
+for (let i = 10; i <= 18; i++) {
+    headerRow.innerHTML += `<th>${i}</th>`;
+}
+headerRow.innerHTML += '<th>In</th><th>Total</th>';
 table.appendChild(headerRow);
 
 // Create par row
@@ -19,27 +21,31 @@ let parValues = [4, 3, 5, 4, 4, 3, 4, 5, 4, 4, 3, 5, 4, 4, 3, 4, 5, 4];
 let frontNinePar = 0;
 let backNinePar = 0;
 parValues.forEach((par, index) => {
-    let td = document.createElement('td');
-    td.textContent = par;
-    td.className = 'par';
-    parRow.appendChild(td);
-    if (index < 9) frontNinePar += par;
-    else backNinePar += par;
+    parRow.innerHTML += `<td class="par">${par}</td>`;
+    if (index < 9) {
+        frontNinePar += par;
+        if (index === 8) {
+            parRow.innerHTML += `<td class="par subtotal">${frontNinePar}</td>`;
+        }
+    } else {
+        backNinePar += par;
+    }
 });
-parRow.innerHTML += `<td class="par subtotal">${frontNinePar}</td><td class="par subtotal">${backNinePar}</td><td class="par total">${frontNinePar + backNinePar}</td>`;
+parRow.innerHTML += `<td class="par subtotal">${backNinePar}</td><td class="par total">${frontNinePar + backNinePar}</td>`;
 table.appendChild(parRow);
 
 // Create rows for players
 for (let i = 1; i <= 4; i++) {
     let playerRow = document.createElement('tr');
     playerRow.innerHTML = `<td class="header">Player ${i}</td>`;
-    for (let j = 1; j <= 18; j++) {
-        let td = document.createElement('td');
-        td.contentEditable = true;
-        td.className = 'score';
-        playerRow.appendChild(td);
+    for (let j = 1; j <= 9; j++) {
+        playerRow.innerHTML += `<td class="score" contenteditable="true"></td>`;
     }
-    playerRow.innerHTML += `<td class="subtotal" id="outPlayer${i}"></td><td class="subtotal" id="inPlayer${i}"></td><td class="total" id="totalPlayer${i}"></td>`;
+    playerRow.innerHTML += `<td class="subtotal" id="outPlayer${i}"></td>`;
+    for (let j = 10; j <= 18; j++) {
+        playerRow.innerHTML += `<td class="score" contenteditable="true"></td>`;
+    }
+    playerRow.innerHTML += `<td class="subtotal" id="inPlayer${i}"></td><td class="total" id="totalPlayer${i}"></td>`;
     table.appendChild(playerRow);
 }
 
@@ -53,17 +59,19 @@ function calculateTotals() {
         let inTotal = 0;
         let playerCells = table.rows[i + 1].cells;
         
-        for (let j = 1; j <= 18; j++) {
+        for (let j = 1; j <= 9; j++) {
             let score = parseInt(playerCells[j].textContent);
-            if (!isNaN(score)) {
-                if (j <= 9) outTotal += score;
-                else inTotal += score;
-            }
+            if (!isNaN(score)) outTotal += score;
         }
+        playerCells[10].textContent = outTotal || '';
+
+        for (let j = 11; j <= 19; j++) {
+            let score = parseInt(playerCells[j].textContent);
+            if (!isNaN(score)) inTotal += score;
+        }
+        playerCells[20].textContent = inTotal || '';
         
         let totalScore = outTotal + inTotal;
-        playerCells[19].textContent = outTotal || '';
-        playerCells[20].textContent = inTotal || '';
         playerCells[21].textContent = totalScore || '';
     }
 }

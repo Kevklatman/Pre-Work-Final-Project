@@ -62,3 +62,23 @@ th {
   outline: none;
   box-shadow: inset 0 0 2px #4CAF50;
 }
+
+/* Ensure all cells have borders */
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+/* Add vertical lines between columns */
+table {
+  border-right: 1px solid #ddd;
+}
+
+/* Add horizontal lines between rows */
+tr {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Adjust padding for better appearance */
+th, td {
+  padding: 8px;
+}
